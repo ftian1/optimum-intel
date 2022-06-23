@@ -57,12 +57,10 @@ We will fine-tune our model for 3 epochs while applying pruning.
 To apply our quantization and pruning methodologies, we first need to create the corresponding configuration describing how we want those methodologies to be applied :
 
 ```python
-from optimum.intel.neural_compressor import IncOptimizer, IncPruner, IncQuantizer
-from optimum.intel.neural_compressor.configuration import IncPruningConfig, IncQuantizationConfig
+from optimum.intel.neural_compressor import IncQuantizer
+from optimum.intel.neural_compressor.configuration import IncQuantizationConfig
 
-# The targeted sparsity is set to 10%
-target_sparsity = 0.1
-config_path = "echarlaix/distilbert-sst2-inc-dynamic-quantization-magnitude-pruning-0.1"
+config_path = "echarlaix/distilbert-sst2-inc-dynamic-quantization-0.1"
 # Load the quantization configuration detailing the quantization we wish to apply
 quantization_config = IncQuantizationConfig.from_pretrained(config_path, config_file_name="quantization.yml")
 # Load the pruning configuration detailing the pruning we wish to apply
@@ -70,14 +68,10 @@ pruning_config = IncPruningConfig.from_pretrained(config_path, config_file_name=
 
 # Instantiate our IncQuantizer using the desired configuration
 quantizer = IncQuantizer(quantization_config, eval_func=eval_func)
-# Instantiate our IncPruner using the desired configuration
-pruner = IncPruner(pruning_config, eval_func=eval_func, train_func=train_func)
-optimizer = IncOptimizer(model, quantizer=quantizer, pruner=pruner)
-# Apply pruning and quantization 
-optimized_model = optimizer.fit()
+optimized_model = quantizer.fit()
 
 # Save the resulting model and its corresponding configuration in the given directory
-optimizer.save_pretrained(output_dir)
+quantizer.save_pretrained(output_dir)
 
 ```
 
