@@ -63,8 +63,6 @@ from optimum.intel.neural_compressor.configuration import IncQuantizationConfig
 config_path = "echarlaix/distilbert-sst2-inc-dynamic-quantization-0.1"
 # Load the quantization configuration detailing the quantization we wish to apply
 quantization_config = IncQuantizationConfig.from_pretrained(config_path, config_file_name="quantization.yml")
-# Load the pruning configuration detailing the pruning we wish to apply
-pruning_config = IncPruningConfig.from_pretrained(config_path, config_file_name="prune.yml")
 
 # Instantiate our IncQuantizer using the desired configuration
 quantizer = IncQuantizer(quantization_config, eval_func=eval_func)
